@@ -31,6 +31,12 @@
  */
 - (void)imagePicker:(GKImagePicker *)imagePicker pickedImage:(UIImage *)image;
 
+/**
+ * @method imagePicker:pickedImage: gets called when a user has chosen an image
+ * @param imagePicker, the image picker instance
+ * @param movie, Specifies the filesystem URL for the movie.
+ */
+- (void)imagePicker:(GKImagePicker *)imagePicker pickedMovie:(NSURL *)movie;
 
 /**
  * @method imagePickerDidCancel: gets called when the user taps the cancel button

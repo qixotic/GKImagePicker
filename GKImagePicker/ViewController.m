@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Aurora Apps. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
+
 #import "ViewController.h"
 #import "GKImagePicker.h"
 
@@ -151,6 +153,15 @@
 
 - (void)imagePicker:(GKImagePicker *)imagePicker pickedImage:(UIImage *)image{
     self.imgView.image = image;
+    [self hideImagePicker];
+}
+
+- (void)imagePicker:(GKImagePicker *)imagePicker pickedMovie:(NSURL *)movie {
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:movie options:nil];
+    CMTime duration = asset.duration;
+    float durationSec = CMTimeGetSeconds(duration);
+    NSLog(@"Duration of %@: %.03g", [movie absoluteString], durationSec);
+
     [self hideImagePicker];
 }
 

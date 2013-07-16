@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Aurora Apps. All rights reserved.
 //
 
+#import <MobileCoreServices/MobileCoreServices.h>
+
 #import "GKImagePicker.h"
 #import "GKImageCropViewController.h"
 
@@ -34,6 +36,7 @@
         _imagePickerController = [[UIImagePickerController alloc] init];
         _imagePickerController.delegate = self;
         _imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        _imagePickerController.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
     }
     return self;
 }
@@ -70,6 +73,13 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
 
+    if ((__bridge CFStringRef) [info objectForKey:UIImagePickerControllerMediaType] == kUTTypeMovie) {
+        if ([self.delegate respondsToSelector:@selector(imagePicker:pickedMovie:)]) {
+            [self.delegate imagePicker:self pickedMovie:[info objectForKey:UIImagePickerControllerMediaURL]];
+        }
+        return;
+    }
+
     GKImageCropViewController *cropController = [[GKImageCropViewController alloc] init];
     cropController.contentSizeForViewInPopover = picker.contentSizeForViewInPopover;
     cropController.sourceImage = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -81,7 +91,7 @@
 }
 
 #pragma mark -
-#pragma GKImagePickerDelegate
+#pragma GKImageCropControllerDelegate
 
 - (void)imageCropController:(GKImageCropViewController *)imageCropController didFinishWithCroppedImage:(UIImage *)croppedImage{
     
